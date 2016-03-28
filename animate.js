@@ -11,76 +11,92 @@
 var data; // a global
 
 d3.json("https://data.cityofnewyork.us/api/views/itfs-ms3e/rows.json", function(error, json) {
-  if (error) return console.warn(error);
-  data = json;
+    if (error) return console.warn(error);
+    data = json;
 
-  // Create separate arrays for different values pulled from JSON file
-  var schools = [];
-  var students = [];
-  var examsTaken = [];
-  var passingExams = [];
-  for (var i = 0; i < 258; i++) {
-    schools[i] = data.data[i][9];
-    students[i] = data.data[i][10];
-    examsTaken[i] = data.data[i][11];
-    passingExams[i] = data.data[i][12];
-  }
+    console.log(data.data[1]);
+    // Create separate arrays for different values pulled from JSON file
+    var schools = [];
+    var students = [];
+    var examsTaken = [];
+    var passingExams = [];
+    var w=0;
+    for (var i = 0; i < 258; i++) {
+	if (data.data[i][10]!=null && data.data[i][11]!=null && data.data[i][12]!=null){
+	    schools[i+w] = data.data[i][9];
+	    students[i+w] = parseFloat(data.data[i][10]);
+	    examsTaken[i+w] = parseFloat(data.data[i][11]);
+	    passingExams[i+w] = parseFloat(data.data[i][12]);
+	}
+	else
+	    w--;
+    }
 
-  // Create dropdown menu to select school
-  var select = d3.select('body')
-    .append('select')
+    // Create dropdown menu to select school
+    var select = d3.select('body')
+	.append('select')
     	.attr('class','select')
-      .on('change', updateData);
+	.on('change', updateData);
 
-  var options = select
-    .selectAll('option')
+    var options = select
+	.selectAll('option')
   	.data(schools).enter()
   	.append('option')
-  		.text(function (d) { return d; });
+  	.text(function (d) { return d; });
 
-      var schoolCircle = d3.select("body")
+    var schoolCircle = d3.select("body")
         .append("svg")
         .attr("width", "97%")
         .attr("height", 250)
         .attr('id', 'fillgauge1');
 
-      var examCircle = d3.select("body")
+    var examCircle = d3.select("body")
         .append("svg")
         .attr("width", "97%")
         .attr("height", 250)
         .attr('id', 'fillgauge2');
 
-      var scoreCircle = d3.select("body")
+    var scoreCircle = d3.select("body")
         .append("svg")
         .attr("width", "97%")
         .attr("height", 250)
         .attr('id', 'fillgauge3');
 
-  function updateData() {
+    function updateData() {
   	selectValue = d3.select('select').property('value');
-    var index = schools.indexOf(selectValue);
+	var index = schools.indexOf(selectValue);
 
-    d3.selectAll('p')
-      .remove();
+	d3.selectAll('p')
+	    .remove();
+	d3.selectAll('svg')
+	    .remove();
 
-    d3.select('body')
-  		.append('p')
-      .attr('id', 'school')
-  		.text('School: ' + selectValue);
+	d3.select('body')
+  	    .append('p')
+	    .attr('id', 'school')
+  	    .text('School: ' + selectValue);
 
-      var config = liquidFillGaugeDefaultSettings();
-      config.textVertPosition = 0.8;
-      config.waveAnimateTime = 5000;
-      config.waveHeight = 0.15;
-      config.waveAnimate = false;
-      config.waveOffset = 0.25;
-      config.valueCountUp = false;
-      config.displayPercent = false;
-
-      var gauge1 = loadLiquidFillGauge("fillgauge1", schools[index], config);
-      var gauge2 = loadLiquidFillGauge("fillgauge2", students[index], config);
-      var gauge3 = loadLiquidFillGauge("fillgauge3", examsTaken[index], config);
-  };
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.circleColor = "#FF7777";
+	config1.textColor = "#FF4444";
+	config1.waveTextColor = "#FFAAAA";
+	config1.waveColor = "#FFDDDD";
+	config1.circleThickness = 0.2;
+	config1.textVertPosition = 0.2;
+	config1.waveAnimateTime = 1000;
+/*
+	config.textVertPosition = 0.8;
+	config.waveAnimateTime = 5000;
+	config.waveHeight = 0.15;
+	config.waveAnimate = false;
+	config.waveOffset = 0.25;
+	config.valueCountUp = false;
+	config.displayPercent = false;
+*/
+	var gauge1 = loadLiquidFillGauge("fillgauge1", (passingExams[index]/examsTaken[index])*100, config1);
+	//var gauge2 = loadLiquidFillGauge("fillgauge2", students[index], config);
+	//var gauge3 = loadLiquidFillGauge("fillgauge3", examsTaken[index], config);
+    };
 
 
 });
