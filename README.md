@@ -7,4 +7,4 @@ https://data.cityofnewyork.us/Education/AP-College-Board-2010-School-Level-Resul
 http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6
 
 ##Team Members:
-Yasmeen
+Yasmeen Roumie, Masahero Masuda, Henry Filosa
