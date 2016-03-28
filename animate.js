@@ -14,7 +14,6 @@ d3.json("https://data.cityofnewyork.us/api/views/itfs-ms3e/rows.json", function(
     if (error) return console.warn(error);
     data = json;
 
-    console.log(data.data[1]);
     // Create separate arrays for different values pulled from JSON file
     var schools = [];
     var students = [];
@@ -44,71 +43,66 @@ d3.json("https://data.cityofnewyork.us/api/views/itfs-ms3e/rows.json", function(
   	.append('option')
   	.text(function (d) { return d; });
 
-    var schoolCircle = d3.select("body")
-        .append("svg")
-        .attr("width", "97%")
-        .attr("height", 250)
-        .attr('id', 'fillgauge1');
-
-    var examCircle = d3.select("body")
-        .append("svg")
-        .attr("width", "97%")
-        .attr("height", 250)
-        .attr('id', 'fillgauge2');
-
-    var scoreCircle = d3.select("body")
-        .append("svg")
-        .attr("width", "97%")
-        .attr("height", 250)
-        .attr('id', 'fillgauge3');
-
     function updateData() {
   	selectValue = d3.select('select').property('value');
 	var index = schools.indexOf(selectValue);
 
-	d3.selectAll('p')
+	d3.selectAll('div')
 	    .remove();
-	d3.selectAll('svg')
-	    .remove();
-
+	d3.select("body")
+	    .append("div");
 	d3.select('body')
-  	    .append('p')
+	    .select("div")
+  	    .append('h2')
 	    .attr('id', 'school')
   	    .text('School: ' + selectValue);
+	d3.select("body")
+	    .select("div")
+	    .append("svg")
+	    .attr("id","fillgauge1")
+	    .attr("width","97%")
+	    .attr("height","500");
+	d3.select("body")
+	    .select("div")
+	    .append("h2")
+	    .text("Total AP tests taken: "+examsTaken[index]);
 
+	var pass=(passingExams[index]/examsTaken[index])*100;
 	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.waveColor = "#FFDDDD";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-/*
-	config.textVertPosition = 0.8;
-	config.waveAnimateTime = 5000;
-	config.waveHeight = 0.15;
-	config.waveAnimate = false;
-	config.waveOffset = 0.25;
-	config.valueCountUp = false;
-	config.displayPercent = false;
-*/
-	var gauge1 = loadLiquidFillGauge("fillgauge1", (passingExams[index]/examsTaken[index])*100, config1);
-	//var gauge2 = loadLiquidFillGauge("fillgauge2", students[index], config);
-	//var gauge3 = loadLiquidFillGauge("fillgauge3", examsTaken[index], config);
+	config1.textVertPosition = .5;
+	if (pass<=40){
+	    config1.circleColor = "#FF7777";
+	    config1.textColor = "#FF4444";
+	    config1.waveTextColor = "#FFAAAA";
+	    config1.waveColor = "#FFDDDD";
+	    config1.circleThickness = 0.2;
+	    config1.waveAnimateTime = 2400;
+	    config1.waveHeight = .4;
+	    config1.waveCount = 1;
+	}
+	else if (pass<75 && pass>40){
+	    config1.circleColor = "#ffff7f";
+	    config1.textColor = "#FF8000";
+	    config1.waveTextColor = "#FFB266";
+	    config1.waveColor = "#ffff7f";
+	    config1.circleThickness = 0.2;
+	    config1.waveAnimateTime = 3000;
+	    config1.waveHeight = 0.3;
+	    config1.waveCount = .5;
+	}
+	//Good test scores
+	else if (pass>=75){
+	    config1.circleColor = "#6ABD45";
+	    config1.textColor = "#2D8BC9";
+	    config1.waveTextColor = "#2D8BC9";
+	    config1.waveColor = "#6ABD45";
+	    config1.circleThickness = 0.2;
+	    config1.waveAnimateTime = 2000;
+	    config1.waveHeight = 0.3;
+	    config1.waveCount = 1;
+	}
+	var gauge1 = loadLiquidFillGauge("fillgauge1",pass, config1);
     };
 
 
 });
-
-//     var config = liquidFillGaugeDefaultSettings();
-//     config.textVertPosition = 0.8;
-//     config.waveAnimateTime = 5000;
-//     config.waveHeight = 0.15;
-//     config.waveAnimate = false;
-//     config.waveOffset = 0.25;
-//     config.valueCountUp = false;
-//     config.displayPercent = false;
-//     var gauge1 = loadLiquidFillGauge("fillgauge", 50, config);
-//     var gauge1 = loadLiquidFillGauge("fillgauge", 50, config);
-//     var gauge1 = loadLiquidFillGauge("fillgauge", 50, config);
