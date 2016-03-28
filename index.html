@@ -1,22 +1,12 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
-  <title>Test scores</title>
+  <title>Test Scores</title>
 </head>
 
 <body>
 </body>
+
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script>
-
-xmlHttp = new XMLHttpRequest();
-xmlHttp.open( "GET", "https://data.cityofnewyork.us/api/views/itfs-ms3e/rows.json?accessType=DOWNLOAD", false );
-xmlHttp.send( null );
-var data = JSON.parse(xmlHttp.responseText);
-<!--Index 9 holds school name, 10 holds how many students took AP tests, 11 holds the total number of exams taken, 12 holds number of exams with scores of 3,4,or 5
-    ex. data.data[1][11] will return the total number of exams taken at the second school in the dataset. 
-    We are school index[25]. Total number of schools = 258
--->
-console.log(data.data[0]);
-
-</script>
+<script src="liquidFillGauge.js"></script>
+<script src="animate.js"></script>
