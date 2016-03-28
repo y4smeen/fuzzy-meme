@@ -1,7 +1,4 @@
 # fuzzy-meme
 
-Veronoi: 
-http://bl.ocks.org/mbostock/4060366
-
-Subway data:
-https://nycopendata.socrata.com/api/views/he7q-3hwy/rows.json?accessType=DOWNLOAD
+Test Data:
+https://data.cityofnewyork.us/Education/AP-College-Board-2010-School-Level-Results/itfs-ms3e
