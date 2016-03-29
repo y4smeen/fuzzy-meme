@@ -1,0 +1,17 @@
+* {
+  font-family: 'Comic Sans MS', sans-serif;
+  text-align: center;
+
+}
+h1 {
+  margin: 1em 0 0.5em 0;
+  color: #343434;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 40px;
+}
+select {
+  display: inline-block;
+  float: inherit;
+  align-content: center;
+}
